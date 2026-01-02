@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="lv">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Janis Getlins | Photography</title>
+
+    <style>
+      :root {
+        --bg: #0e0e0e;
+        --card: #1a1a1a;
+        --text: #f2f2f2;
+        --muted: #9a9a9a;
+        --accent: #ffffff;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        font-family: Arial, Helvetica, sans-serif;
+        background: var(--bg);
+        color: var(--text);
+      }
+
+      header {
+        padding: 20px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border-bottom: 1px solid #222;
+        position: sticky;
+        top: 0;
+        background: var(--bg);
+        z-index: 10;
+      }
+
+      header h1 {
+        margin: 0;
+        font-size: 16px;
+        letter-spacing: 1px;
+      }
+
+      .social a {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        color: var(--text);
+        text-decoration: none;
+        opacity: 0.8;
+      }
+
+      .social a:hover {
+        opacity: 1;
+      }
+
+      .social svg {
+        width: 18px;
+        height: 18px;
+        fill: currentColor;
+      }
+
+      nav button {
+        background: none;
+        border: 1px solid var(--muted);
+        color: var(--text);
+        padding: 6px 10px;
+        margin-left: 6px;
+        cursor: pointer;
+      }
+
+      nav button.active {
+        border-color: var(--accent);
+      }
+
+      .intro {
+        padding: 30px 20px;
+        max-width: 900px;
+      }
+
+      .intro p {
+        color: var(--muted);
+        line-height: 1.6;
+      }
+
+      .filters,
+      .uploader {
+        padding: 0 20px 10px;
+      }
+
+      .filters button,
+      .upload-btn {
+        margin-right: 6px;
+        margin-bottom: 6px;
+        padding: 6px 12px;
+        background: none;
+        border: 1px solid var(--muted);
+        color: var(--text);
+        cursor: pointer;
+      }
+
+      .filters button.active,
+      .upload-btn:hover {
+        border-color: var(--accent);
+      }
+
+      .gallery {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+        gap: 15px;
+        padding: 20px;
+      }
+
+      .card {
+        background: var(--card);
+        border-radius: 6px;
+        overflow: hidden;
+        cursor: pointer;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+      }
+
+      .card:hover {
+        transform: scale(1.03);
+        box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
+      }
+
+      .card img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
+      }
+
+      footer {
+        padding: 30px 20px;
+        border-top: 1px solid #222;
+      }
+
+      form {
+        max-width: 500px;
+      }
+
+      input,
+      textarea {
+        width: 100%;
+        margin-bottom: 10px;
+        padding: 10px;
+        background: #111;
+        border: 1px solid #333;
+        color: var(--text);
+      }
+
+      button.submit {
+        padding: 10px;
+        border: 1px solid var(--accent);
+        background: none;
+        color: var(--text);
+        cursor: pointer;
+      }
+
+      .lightbox {
+        position: fixed;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.95);
+        display: none;
+        align-items: center;
+        justify-content: center;
+        z-index: 100;
+      }
+
+      .lightbox img {
+        max-width: 90%;
+        max-height: 90%;
+      }
+    </style>
+  </head>
+
+  <body>
+    <header>
+      <h1>JANIS GETLINS / PHOTOGRAPHY</h1>
+
+      <div class="social">
+        <a
+          href="https://www.instagram.com/janis_getlins/"
+          target="_blank"
+          aria-label="Instagram"
+        >
+          <svg viewBox="0 0 24 24">
+            <path
+              d="M7 2h10a5 5 0 0 1 5 5v10a5 5 0 0 1-5 5H7a5 5 0 0 1-5-5V7a5 5 0 0 1 5-5zm5 5.8A4.2 4.2 0 1 0 16.2 12 4.21 4.21 0 0 0 12 7.8zm0 6.9A2.7 2.7 0 1 1 14.7 12 2.71 2.71 0 0 1 12 14.7zM17.5 6.5a1 1 0 1 0 1 1 1 1 0 0 0-1-1z"
+            />
+          </svg>
+          Instagram
+        </a>
+      </div>
+
+      <nav>
+        <button id="btn-lv" class="active" onclick="setLang('lv')">LV</button>
+        <button id="btn-en" onclick="setLang('en')">EN</button>
+      </nav>
+    </header>
+
+    <section class="intro">
+      <p id="bio">
+        Esmu fotogrāfs, kurš fokusējas uz mirkļiem, noskaņu un detaļām.
+      </p>
+    </section>
+
+    <section class="filters">
+      <button class="active" onclick="filterImages('all', event)">All</button>
+      <button onclick="filterImages('portrait', event)">Portrait</button>
+      <button onclick="filterImages('street', event)">Street</button>
+      <button onclick="filterImages('nature', event)">Nature</button>
+    </section>
+
+    <section class="uploader">
+      <label class="upload-btn">
+        + Add photos
+        <input
+          type="file"
+          multiple
+          accept="image/*"
+          hidden
+          onchange="addImages(event)"
+        />
+      </label>
+    </section>
+
+    <section class="gallery"></section>
+
+    <footer>
+      <h3 id="contactTitle">Sazināties</h3>
+
+      <form action="https://formspree.io/f/xaqnqjwj" method="POST">
+        <input type="text" name="name" placeholder="Vārds" required />
+        <input type="email" name="email" placeholder="E-pasts" required />
+        <textarea name="message" placeholder="Ziņa" rows="5"></textarea>
+        <button class="submit" type="submit">Sūtīt</button>
+      </form>
+    </footer>
+
+    <div class="lightbox" onclick="closeLightbox()">
+      <img id="lightboxImg" />
+    </div>
+
+    <script>
+      const gallery = document.querySelector(".gallery");
+      const lightbox = document.querySelector(".lightbox");
+      const lightboxImg = document.getElementById("lightboxImg");
+
+      let images = [];
+
+      try {
+        const stored = localStorage.getItem("images");
+        if (stored) {
+          images = JSON.parse(stored);
+        }
+      } catch (err) {
+        console.error("LocalStorage error:", err);
+        images = [];
+      }
+
+      function renderImages() {
+        gallery.innerHTML = "";
+        images.forEach((img) => {
+          const card = document.createElement("div");
+          card.className = "card";
+          card.dataset.cat = img.cat;
+          card.innerHTML = `<img src="${img.src}" loading="lazy">`;
+          card.onclick = () => {
+            lightbox.style.display = "flex";
+            lightboxImg.src = img.src;
+          };
+          gallery.appendChild(card);
+        });
+      }
+
+      function addImages(e) {
+        [...e.target.files].forEach((file) => {
+          const reader = new FileReader();
+          reader.onload = () => {
+            images.push({
+              src: reader.result,
+              cat: "nature",
+            });
+            localStorage.setItem("images", JSON.stringify(images));
+            renderImages();
+          };
+          reader.readAsDataURL(file);
+        });
+      }
+
+      function closeLightbox() {
+        lightbox.style.display = "none";
+      }
+
+      function filterImages(cat, e) {
+        document
+          .querySelectorAll(".filters button")
+          .forEach((b) => b.classList.remove("active"));
+        e.target.classList.add("active");
+
+        document.querySelectorAll(".card").forEach((c) => {
+          c.style.display =
+            cat === "all" || c.dataset.cat === cat ? "block" : "none";
+        });
+      }
+
+      const text = {
+        lv: {
+          bio: "Esmu fotogrāfs, kurš fokusējas uz mirkļiem, noskaņu un detaļām.",
+          contact: "Sazināties",
+        },
+        en: {
+          bio: "I am a photographer focused on moments, mood and details.",
+          contact: "Contact",
+        },
+      };
+
+      function setLang(l) {
+        document.getElementById("bio").innerText = text[l].bio;
+        document.getElementById("contactTitle").innerText = text[l].contact;
+        document.getElementById("btn-lv").classList.remove("active");
+        document.getElementById("btn-en").classList.remove("active");
+        document.getElementById("btn-" + l).classList.add("active");
+      }
+
+      renderImages();
+    </script>
+  </body>
+</html>
